@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, HelpCircle, Download, RefreshCw, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Sliders } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 export function Interface() {
   const { 
@@ -17,8 +20,12 @@ export function Interface() {
     reset, 
     audioEnabled, 
     toggleAudio, 
-    isHelpOpen, 
-    toggleHelp 
+    isInfoOpen, 
+    toggleInfo,
+    isAdvancedMode,
+    toggleAdvancedMode,
+    advancedSettings,
+    updateAdvancedSettings
   } = useStore();
 
   const [aspiration, setAspiration] = useState('');
@@ -31,12 +38,12 @@ export function Interface() {
 
   const handleDownload = () => {
     if (!mission) return;
-    const text = `DUSTY DIRECTIVE\n\n${mission.title.toUpperCase()}\n\n${mission.description}\n\n-- The Playa Oracle`;
+    const text = `SERENDIPITY DISPENSED\n\n${mission.title.toUpperCase()}\n\n${mission.description}\n\n-- The Serendipity Dispenser`;
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `playa-prank-${mission.id}.txt`;
+    a.download = `serendipity-${mission.id}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -69,7 +76,7 @@ export function Interface() {
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-auto z-50">
         <div className="p-2">
           <h1 className="text-2xl font-bold text-[#ffaa55] tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(255,100,0,0.5)]">
-            THE PLAYA ORACLE
+            SERENDIPITY DISPENSER
           </h1>
           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffaa55] to-transparent mt-1 opacity-50"></div>
         </div>
@@ -78,39 +85,113 @@ export function Interface() {
           <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
             {audioEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </Button>
-          <Button variant="outline" size="icon" onClick={toggleHelp} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
-            <HelpCircle className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={toggleInfo} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
+            <Info className="h-4 w-4" />
           </Button>
         </div>
       </header>
 
       {/* Input Modal */}
       <Dialog open={isInputOpen} onOpenChange={setInputOpen}>
-        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] sm:max-w-[425px] pointer-events-auto shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] sm:max-w-[550px] pointer-events-auto shadow-[0_0_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto scrollbar-hide">
           <DialogHeader>
             <DialogTitle className="text-[#ffaa55] font-cinzel tracking-widest text-xl text-center border-b border-[#ffaa55]/20 pb-4">
-              CONSULT THE DUST
+              INITIATE SEQUENCE
             </DialogTitle>
             <DialogDescription className="text-[#ccaa88] font-rajdhani text-center pt-4 text-lg">
-              What mischief or magic do you seek? The Oracle listens...
+              Feed the machine your intention, and it will dispense a moment of unexpected magic.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          
+          <div className="grid gap-6 py-4">
             <Textarea 
-              placeholder="I want to find the perfect sunrise..." 
+              placeholder="I wish to encounter..." 
               value={aspiration}
               onChange={(e) => setAspiration(e.target.value)}
-              className="bg-black/40 border-[#5d4037] focus:border-[#ffaa55] text-[#ffddaa] font-rajdhani h-32 resize-none text-lg italic"
+              className="bg-black/40 border-[#5d4037] focus:border-[#ffaa55] text-[#ffddaa] font-rajdhani h-24 resize-none text-lg italic"
               maxLength={150}
             />
+
+            <div className="flex items-center justify-between border-t border-[#ffaa55]/10 pt-4">
+                <div className="flex items-center space-x-2">
+                    <Settings className="h-4 w-4 text-[#ffaa55]" />
+                    <Label htmlFor="advanced-mode" className="text-[#ffaa55] font-cinzel text-sm tracking-wider">ADVANCED CALIBRATION</Label>
+                </div>
+                <Switch 
+                    id="advanced-mode" 
+                    checked={isAdvancedMode}
+                    onCheckedChange={toggleAdvancedMode}
+                    className="data-[state=checked]:bg-[#ffaa55] data-[state=unchecked]:bg-[#5d4037]"
+                />
+            </div>
+
+            <AnimatePresence>
+                {isAdvancedMode && (
+                    <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="space-y-6 overflow-hidden"
+                    >
+                        {/* Intensity Slider */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs font-rajdhani text-[#ccaa88] uppercase tracking-wider">
+                                <span>Mild</span>
+                                <span className="text-[#ffaa55]">Intensity</span>
+                                <span>Wild</span>
+                            </div>
+                            <Slider 
+                                value={[advancedSettings.intensity]} 
+                                max={100} 
+                                step={1} 
+                                onValueChange={(val) => updateAdvancedSettings({ intensity: val[0] })}
+                                className="cursor-pointer"
+                            />
+                        </div>
+
+                        {/* Social Slider */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs font-rajdhani text-[#ccaa88] uppercase tracking-wider">
+                                <span>Solo Journey</span>
+                                <span className="text-[#ffaa55]">Social Factor</span>
+                                <span>Group Hug</span>
+                            </div>
+                            <Slider 
+                                value={[advancedSettings.social]} 
+                                max={100} 
+                                step={1} 
+                                onValueChange={(val) => updateAdvancedSettings({ social: val[0] })}
+                                className="cursor-pointer"
+                            />
+                        </div>
+
+                        {/* Weirdness Slider */}
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-xs font-rajdhani text-[#ccaa88] uppercase tracking-wider">
+                                <span>Grounded</span>
+                                <span className="text-[#ffaa55]">Absurdity</span>
+                                <span>Surreal</span>
+                            </div>
+                            <Slider 
+                                value={[advancedSettings.weirdness]} 
+                                max={100} 
+                                step={1} 
+                                onValueChange={(val) => updateAdvancedSettings({ weirdness: val[0] })}
+                                className="cursor-pointer"
+                            />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center pt-2">
             <Button 
                 onClick={handleSubmit} 
                 disabled={!aspiration.trim()}
-                className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg"
+                className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg w-full sm:w-auto"
             >
-              ROLL THE DICE
+              DISPENSE SERENDIPITY
             </Button>
           </div>
         </DialogContent>
@@ -191,7 +272,7 @@ export function Interface() {
                     variants={letterVariants}
                     className="font-cinzel text-sm tracking-[0.3em] text-[#5D4037] font-bold uppercase"
                   >
-                    Dusty Directive
+                    Serendipity
                   </motion.h3>
 
                   {/* Title - Word-based rendering to prevent mid-word breaks */}
@@ -263,7 +344,7 @@ export function Interface() {
                     variant="outline"
                     className="bg-black/50 hover:bg-black/70 text-white border-white/20 font-orbitron"
                   >
-                    <RefreshCw className="mr-2 h-4 w-4" /> NEW PRANK
+                    <RefreshCw className="mr-2 h-4 w-4" /> NEW SPIN
                  </Button>
               </div>
             </div>
@@ -271,17 +352,41 @@ export function Interface() {
         )}
       </AnimatePresence>
 
-      {/* Help Overlay */}
-      <Dialog open={isHelpOpen} onOpenChange={toggleHelp}>
-        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto">
+      {/* Info / Philosophy Overlay */}
+      <Dialog open={isInfoOpen} onOpenChange={toggleInfo}>
+        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto max-w-2xl">
             <DialogHeader>
-                <DialogTitle className="font-cinzel text-[#ffaa55]">PLAYA GUIDE</DialogTitle>
+                <DialogTitle className="font-cinzel text-[#ffaa55] text-2xl tracking-widest text-center mb-4">THE ART OF SERENDIPITY</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 font-rajdhani text-lg">
-                <p>1. Drag to explore the dust.</p>
-                <p>2. Click the Golden Obelisk to consult the Oracle.</p>
-                <p>3. Offer your intention.</p>
-                <p>4. Receive a Dusty Directive etched in wood.</p>
+            <div className="space-y-6 font-rajdhani text-lg leading-relaxed p-2 overflow-y-auto max-h-[60vh]">
+                <div className="border-l-2 border-[#ffaa55] pl-4">
+                  <p className="italic text-[#ffcc00]">"Serendipity is not just luck. It is the intersection of preparation and openness."</p>
+                </div>
+
+                <p>
+                  At Burning Man, serendipity is engineered through <strong>Immediacy</strong> and <strong>Gifting</strong>. By removing the barriers of commerce and default-world transactions, we create a fertile ground for impossible coincidences.
+                </p>
+
+                <h3 className="font-cinzel text-[#ffaa55] text-xl mt-4">HOW IT WORKS</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                   <div className="bg-[#5d4037]/20 p-4 rounded border border-[#ffaa55]/20">
+                      <h4 className="font-bold text-[#ffaa55] mb-2">Say Yes</h4>
+                      <p className="text-sm">To the adventure you didn't plan.</p>
+                   </div>
+                   <div className="bg-[#5d4037]/20 p-4 rounded border border-[#ffaa55]/20">
+                      <h4 className="font-bold text-[#ffaa55] mb-2">Get Lost</h4>
+                      <p className="text-sm">The best things happen when you don't know where you are.</p>
+                   </div>
+                   <div className="bg-[#5d4037]/20 p-4 rounded border border-[#ffaa55]/20">
+                      <h4 className="font-bold text-[#ffaa55] mb-2">Engage</h4>
+                      <p className="text-sm">Participate, don't just spectate.</p>
+                   </div>
+                </div>
+
+                <p className="text-sm text-[#ffaa55]/70 text-center mt-4">
+                  This machine is merely a catalyst. The magic requires YOU.
+                </p>
             </div>
         </DialogContent>
       </Dialog>
@@ -290,7 +395,7 @@ export function Interface() {
       {!isNearMachine && !mission && (
         <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">
             <p className="text-[#ffaa55]/50 font-cinzel tracking-[0.3em] text-sm animate-pulse">
-                APPROACH THE ORACLE
+                APPROACH THE DISPENSER
             </p>
         </div>
       )}

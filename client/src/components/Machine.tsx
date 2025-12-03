@@ -139,7 +139,7 @@ export function Machine() {
               anchorY="middle"
               letterSpacing={0.2}
             >
-              {hovered ? "COMMUNE" : ""}
+              {hovered ? "DISPENSE" : ""}
             </Text>
           )}
         </group>

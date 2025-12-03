@@ -11,13 +11,23 @@ export interface Mission {
   color: string;
 }
 
+interface AdvancedSettings {
+  intensity: number; // 0 (Mild) to 100 (Wild)
+  social: number;    // 0 (Solo) to 100 (Group)
+  weirdness: number; // 0 (Grounded) to 100 (Absurd)
+}
+
 interface State {
   isNearMachine: boolean;
   isInputOpen: boolean;
   processingStep: string | null; // null if not processing
   mission: Mission | null;
   audioEnabled: boolean;
-  isHelpOpen: boolean;
+  isInfoOpen: boolean;
+  
+  // Advanced Mode
+  isAdvancedMode: boolean;
+  advancedSettings: AdvancedSettings;
 
   // Actions
   setNearMachine: (near: boolean) => void;
@@ -25,16 +35,18 @@ interface State {
   startProcessing: (aspiration: string) => Promise<void>;
   reset: () => void;
   toggleAudio: () => void;
-  toggleHelp: () => void;
+  toggleInfo: () => void;
+  toggleAdvancedMode: () => void;
+  updateAdvancedSettings: (settings: Partial<AdvancedSettings>) => void;
 }
 
 const PROCESSING_STEPS = [
-  "Reading your aura...",
-  "Consulting the dust spirits...",
-  "Checking the weather...",
-  "Shuffling the deck of fate...",
-  "Rolling the cosmic dice...",
-  "Your prank is served!"
+  "Calibrating serendipity sensors...",
+  "Scanning Playa vibes...",
+  "Injecting controlled chaos...",
+  "Aligning with the dust...",
+  "Manifesting opportunity...",
+  "Dispensing serendipity!"
 ];
 
 const MOCK_MISSIONS: Record<MissionCategory, Mission[]> = {
@@ -77,7 +89,14 @@ export const useStore = create(
     processingStep: null,
     mission: null,
     audioEnabled: true,
-    isHelpOpen: false,
+    isInfoOpen: false,
+    
+    isAdvancedMode: false,
+    advancedSettings: {
+      intensity: 50,
+      social: 50,
+      weirdness: 50
+    },
 
     setNearMachine: (near) => set({ isNearMachine: near, isInputOpen: near }),
     
@@ -105,6 +124,11 @@ export const useStore = create(
     reset: () => set({ mission: null, isNearMachine: false, processingStep: null }),
 
     toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
-    toggleHelp: () => set((state) => ({ isHelpOpen: !state.isHelpOpen })),
+    toggleInfo: () => set((state) => ({ isInfoOpen: !state.isInfoOpen })),
+    
+    toggleAdvancedMode: () => set((state) => ({ isAdvancedMode: !state.isAdvancedMode })),
+    updateAdvancedSettings: (settings) => set((state) => ({ 
+      advancedSettings: { ...state.advancedSettings, ...settings } 
+    })),
   }))
 );
