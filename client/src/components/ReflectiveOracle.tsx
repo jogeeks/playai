@@ -40,7 +40,7 @@ export function ReflectiveOracle() {
             onPointerOut={handlePointerOut}
         >
             {/* The Shiny Cube */}
-            <CubeCamera resolution={256} frames={1} envMap={null}>
+            <CubeCamera resolution={256} frames={1}>
                 {(texture) => (
                     <mesh castShadow receiveShadow>
                         <boxGeometry args={[2.5, 2.5, 2.5]} />

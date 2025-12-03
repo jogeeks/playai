@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -31,11 +31,15 @@ export function Interface() {
     oracleChat,
     isOracleProcessing,
     sendOracleMessage,
-    resetOracle
+    resetOracle,
+    isReleasing,
+    releaseBurden,
+    releasedBurdens
   } = useStore();
 
   const [aspiration, setAspiration] = useState('');
   const [chatInput, setChatInput] = useState('');
+  const [burdenInput, setBurdenInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,6 +57,13 @@ export function Interface() {
     if (chatInput.trim() && !isOracleProcessing) {
         sendOracleMessage(chatInput);
         setChatInput('');
+    }
+  };
+  
+  const handleBurdenSubmit = () => {
+    if (burdenInput.trim()) {
+        releaseBurden(burdenInput);
+        setBurdenInput('');
     }
   };
 
@@ -89,6 +100,14 @@ export function Interface() {
       transition: { duration: 0.4 } 
     }
   };
+  
+  const getTitle = () => {
+    switch(activeMachine) {
+        case 'oracle': return 'REFLECTIVE ORACLE';
+        case 'temple': return 'TEMPLE OF RELEASE';
+        default: return 'PLAYA ARTIFACTS';
+    }
+  };
 
   return (
     <div className="absolute inset-0 pointer-events-none font-cinzel">
@@ -96,7 +115,7 @@ export function Interface() {
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-auto z-50">
         <div className="p-2">
           <h1 className="text-2xl font-bold text-white tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-            {activeMachine === 'oracle' ? 'REFLECTIVE ORACLE' : 'PLAYA ARTIFACTS'}
+            {getTitle()}
           </h1>
           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white to-transparent mt-1 opacity-50"></div>
         </div>
@@ -443,6 +462,70 @@ export function Interface() {
         )}
       </AnimatePresence>
 
+      {/* ----- TEMPLE INTERFACE ----- */}
+      <AnimatePresence>
+        {activeMachine === 'temple' && (
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="absolute inset-0 flex items-center justify-center z-40 pointer-events-auto p-4"
+            >
+                <div className="w-full max-w-[500px] bg-[#1a0f0f] border border-[#5d4037] p-8 rounded-lg shadow-[0_0_60px_rgba(255,50,0,0.3)] text-center relative overflow-hidden">
+                     {/* Background Fire Effect */}
+                     <div className="absolute inset-0 opacity-10 pointer-events-none bg-gradient-to-t from-red-900 to-transparent"></div>
+
+                     {/* Close Button */}
+                     <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        onClick={() => setActiveMachine(null)} 
+                        className="absolute top-4 right-4 text-[#8d6e63] hover:text-[#ff4400] hover:bg-transparent"
+                     >
+                         <VolumeX className="w-6 h-6" /> {/* Close Icon placeholder */}
+                     </Button>
+
+                     <h2 className="text-3xl font-cinzel text-[#ff4400] mb-2 tracking-widest drop-shadow-md">TEMPLE OF RELEASE</h2>
+                     <p className="text-[#8d6e63] font-rajdhani mb-8">Leave your burdens here. Let them burn into the ether.</p>
+
+                     {isReleasing ? (
+                         <div className="py-12">
+                             <motion.div 
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: -50, scale: 1.5 }}
+                                transition={{ duration: 2.5 }}
+                                className="text-[#ff4400] font-cinzel text-2xl font-bold flex flex-col items-center gap-4"
+                             >
+                                <Flame className="w-12 h-12 animate-pulse" />
+                                <span>RELEASING...</span>
+                             </motion.div>
+                         </div>
+                     ) : (
+                         <div className="space-y-6">
+                             <Textarea 
+                                value={burdenInput}
+                                onChange={(e) => setBurdenInput(e.target.value)}
+                                placeholder="I release..."
+                                className="bg-black/30 border-[#3e2723] text-[#ffaa55] font-handwriting text-xl h-32 focus:border-[#ff4400] resize-none text-center placeholder:text-[#5d4037]"
+                             />
+                             <Button 
+                                onClick={handleBurdenSubmit} 
+                                disabled={!burdenInput.trim()}
+                                className="w-full bg-[#3e2723] hover:bg-[#ff4400] text-[#ffddaa] hover:text-white font-cinzel tracking-widest py-6 transition-colors duration-500"
+                             >
+                                 BURN IT
+                             </Button>
+                         </div>
+                     )}
+
+                     <div className="mt-6 text-xs text-[#5d4037] font-mono tracking-widest">
+                         BURDENS RELEASED: {releasedBurdens}
+                     </div>
+                </div>
+            </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Info / Philosophy Overlay */}
       <Dialog open={isInfoOpen} onOpenChange={toggleInfo}>
         <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto max-w-2xl">
@@ -486,7 +569,7 @@ export function Interface() {
       {!activeMachine && !mission && (
         <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">
             <p className="text-white/70 font-cinzel tracking-[0.3em] text-sm animate-pulse bg-black/20 inline-block px-4 py-2 rounded backdrop-blur-sm">
-                CHOOSE YOUR PATH: DISPENSER OR ORACLE
+                CHOOSE YOUR PATH: DISPENSER, ORACLE, OR TEMPLE
             </p>
         </div>
       )}

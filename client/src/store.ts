@@ -23,7 +23,7 @@ interface ChatMessage {
 }
 
 interface State {
-  activeMachine: 'dispenser' | 'oracle' | null;
+  activeMachine: 'dispenser' | 'oracle' | 'temple' | null;
   
   // Dispenser State
   isInputOpen: boolean;
@@ -36,12 +36,16 @@ interface State {
   oracleChat: ChatMessage[];
   isOracleProcessing: boolean;
 
+  // Temple State
+  isReleasing: boolean;
+  releasedBurdens: number;
+
   // Global State
   audioEnabled: boolean;
   isInfoOpen: boolean;
 
   // Actions
-  setActiveMachine: (machine: 'dispenser' | 'oracle' | null) => void;
+  setActiveMachine: (machine: 'dispenser' | 'oracle' | 'temple' | null) => void;
   setInputOpen: (open: boolean) => void;
   
   // Dispenser Actions
@@ -53,6 +57,9 @@ interface State {
   // Oracle Actions
   sendOracleMessage: (message: string) => Promise<void>;
   resetOracle: () => void;
+
+  // Temple Actions
+  releaseBurden: (burden: string) => Promise<void>;
 
   // Global Actions
   toggleAudio: () => void;
@@ -126,6 +133,9 @@ export const useStore = create(
     },
     oracleChat: [{ role: 'oracle', content: "I am the Reflective Oracle. I see what you hide. Speak." }],
     isOracleProcessing: false,
+    
+    isReleasing: false,
+    releasedBurdens: 0,
 
     setActiveMachine: (machine) => set({ 
         activeMachine: machine, 
@@ -172,6 +182,16 @@ export const useStore = create(
         oracleChat: [{ role: 'oracle', content: "I am the Reflective Oracle. I see what you hide. Speak." }],
         activeMachine: null
     }),
+
+    releaseBurden: async (burden) => {
+      set({ isReleasing: true });
+      // Simulate burning time
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      set((state) => ({ 
+        isReleasing: false, 
+        releasedBurdens: state.releasedBurdens + 1 
+      }));
+    },
 
     toggleAdvancedMode: () => set((state) => ({ isAdvancedMode: !state.isAdvancedMode })),
     updateAdvancedSettings: (settings) => set((state) => ({ 
