@@ -31,12 +31,12 @@ export function Interface() {
 
   const handleDownload = () => {
     if (!mission) return;
-    const text = `DIVINE MANDATE\n\n${mission.title.toUpperCase()}\n\n${mission.description}\n\n-- The Oracle`;
+    const text = `DUSTY DIRECTIVE\n\n${mission.title.toUpperCase()}\n\n${mission.description}\n\n-- The Playa Oracle`;
     const blob = new Blob([text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `god-token-${mission.id}.txt`;
+    a.download = `playa-prank-${mission.id}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -69,7 +69,7 @@ export function Interface() {
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-auto z-50">
         <div className="p-2">
           <h1 className="text-2xl font-bold text-[#ffaa55] tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(255,100,0,0.5)]">
-            ORACLE OF AGES
+            THE PLAYA ORACLE
           </h1>
           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffaa55] to-transparent mt-1 opacity-50"></div>
         </div>
@@ -89,15 +89,15 @@ export function Interface() {
         <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] sm:max-w-[425px] pointer-events-auto shadow-[0_0_50px_rgba(0,0,0,0.8)]">
           <DialogHeader>
             <DialogTitle className="text-[#ffaa55] font-cinzel tracking-widest text-xl text-center border-b border-[#ffaa55]/20 pb-4">
-              COMMUNE WITH THE DIVINE
+              CONSULT THE DUST
             </DialogTitle>
             <DialogDescription className="text-[#ccaa88] font-rajdhani text-center pt-4 text-lg">
-              What burden or dream do you carry? Speak, and the machine shall etch your path.
+              What mischief or magic do you seek? The Oracle listens...
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <Textarea 
-              placeholder="I seek guidance on..." 
+              placeholder="I want to find the perfect sunrise..." 
               value={aspiration}
               onChange={(e) => setAspiration(e.target.value)}
               className="bg-black/40 border-[#5d4037] focus:border-[#ffaa55] text-[#ffddaa] font-rajdhani h-32 resize-none text-lg italic"
@@ -110,7 +110,7 @@ export function Interface() {
                 disabled={!aspiration.trim()}
                 className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg"
             >
-              OFFER TO THE ORACLE
+              ROLL THE DICE
             </Button>
           </div>
         </DialogContent>
@@ -191,7 +191,7 @@ export function Interface() {
                     variants={letterVariants}
                     className="font-cinzel text-sm tracking-[0.3em] text-[#5D4037] font-bold uppercase"
                   >
-                    Divine Mandate
+                    Dusty Directive
                   </motion.h3>
 
                   {/* Title - Word-based rendering to prevent mid-word breaks */}
@@ -256,14 +256,14 @@ export function Interface() {
                     onClick={handleDownload} 
                     className="bg-[#5D4037] hover:bg-[#3e2723] text-[#D7CCC8] border border-[#D7CCC8]/20 font-cinzel tracking-widest"
                   >
-                    <Download className="mr-2 h-4 w-4" /> CLAIM TOKEN
+                    <Download className="mr-2 h-4 w-4" /> KEEP TOKEN
                  </Button>
                  <Button 
                     onClick={reset} 
                     variant="outline"
                     className="bg-black/50 hover:bg-black/70 text-white border-white/20 font-orbitron"
                   >
-                    <RefreshCw className="mr-2 h-4 w-4" /> DISCARD
+                    <RefreshCw className="mr-2 h-4 w-4" /> NEW PRANK
                  </Button>
               </div>
             </div>
@@ -275,13 +275,13 @@ export function Interface() {
       <Dialog open={isHelpOpen} onOpenChange={toggleHelp}>
         <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto">
             <DialogHeader>
-                <DialogTitle className="font-cinzel text-[#ffaa55]">OPERATIONAL GUIDE</DialogTitle>
+                <DialogTitle className="font-cinzel text-[#ffaa55]">PLAYA GUIDE</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 font-rajdhani text-lg">
-                <p>1. Drag to explore the sacred void.</p>
-                <p>2. Click the Golden Obelisk to commune.</p>
-                <p>3. Offer your soul's query.</p>
-                <p>4. Receive the divine mandate etched in wood.</p>
+                <p>1. Drag to explore the dust.</p>
+                <p>2. Click the Golden Obelisk to consult the Oracle.</p>
+                <p>3. Offer your intention.</p>
+                <p>4. Receive a Dusty Directive etched in wood.</p>
             </div>
         </DialogContent>
       </Dialog>
@@ -290,7 +290,7 @@ export function Interface() {
       {!isNearMachine && !mission && (
         <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">
             <p className="text-[#ffaa55]/50 font-cinzel tracking-[0.3em] text-sm animate-pulse">
-                APPROACH THE OBELISK
+                APPROACH THE ORACLE
             </p>
         </div>
       )}
