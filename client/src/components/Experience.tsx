@@ -13,14 +13,15 @@ export function Experience() {
         gl={{ antialias: true }}
       >
         {/* Lighting */}
-        <ambientLight intensity={0.4} color="#4a4a6a" />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#ff9900" />
-        <pointLight position={[-10, 5, -10]} intensity={1} color="#00ffff" />
+        <hemisphereLight intensity={0.3} groundColor="#000000" color="#4a4a6a" />
+        <ambientLight intensity={0.5} color="#4a4a6a" />
+        <pointLight position={[10, 10, 10]} intensity={2} color="#ff9900" />
+        <pointLight position={[-10, 5, -10]} intensity={2} color="#00ffff" />
         <spotLight 
             position={[0, 15, 0]} 
-            angle={0.3} 
+            angle={0.5} 
             penumbra={1} 
-            intensity={1} 
+            intensity={3} 
             castShadow 
             color="#00ffff"
         />

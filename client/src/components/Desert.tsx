@@ -14,9 +14,11 @@ export function Desert() {
     >
       <planeGeometry args={[100, 100, 64, 64]} />
       <meshStandardMaterial 
-        color="#C76B38" /* Sand color */
-        roughness={0.8}
-        metalness={0.1}
+        color="#E68A5C" /* Lighter Sand color */
+        roughness={1}
+        metalness={0}
+        emissive="#331100"
+        emissiveIntensity={0.2}
       />
     </mesh>
   );

@@ -70,10 +70,11 @@ export function Machine() {
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <cylinderGeometry args={[1, 1, 3, 32]} />
             <meshStandardMaterial 
-                color="#1a1a2e" 
-                metalness={0.8} 
+                color="#2a2a4e" 
+                metalness={0.5} 
                 roughness={0.2} 
-                emissive={hovered ? '#1a1a3e' : '#000000'}
+                emissive={hovered ? '#1a1a3e' : '#050510'}
+                emissiveIntensity={0.5}
             />
           </mesh>
 
