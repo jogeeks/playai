@@ -12,20 +12,20 @@ export function Experience() {
         camera={{ position: [0, 2, 10], fov: 45 }}
         gl={{ antialias: true }}
       >
-        {/* Lighting - Warm Divine Atmosphere */}
-        <hemisphereLight intensity={0.2} groundColor="#000000" color="#332211" />
-        <ambientLight intensity={0.3} color="#553311" />
+        {/* Lighting - Significantly Boosted for Visibility */}
+        <hemisphereLight intensity={1} groundColor="#111111" color="#443322" />
+        <ambientLight intensity={0.8} color="#aa8866" />
         
         {/* Golden Rim Light */}
-        <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffaa55" />
-        <pointLight position={[-10, 5, -10]} intensity={0.5} color="#aa5522" />
+        <pointLight position={[10, 10, 10]} intensity={3} color="#ffaa55" />
+        <pointLight position={[-10, 5, -10]} intensity={2} color="#4466aa" />
         
         {/* Divine Spotlight from Above */}
         <spotLight 
             position={[0, 20, 0]} 
             angle={0.6} 
             penumbra={0.5} 
-            intensity={2} 
+            intensity={5} 
             castShadow 
             color="#ffcc88"
             distance={50}
@@ -33,7 +33,7 @@ export function Experience() {
 
         <Suspense fallback={null}>
           {/* World */}
-          <color attach="background" args={['#050301']} /> {/* Deep Warm Black */}
+          <color attach="background" args={['#080503']} /> {/* Dark warm brown-black instead of pure black */}
           <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={0.5} />
           
           <group>

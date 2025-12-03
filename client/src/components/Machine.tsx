@@ -66,14 +66,14 @@ export function Machine() {
             onPointerOver={handlePointerOver}
             onPointerOut={handlePointerOut}
         >
-          {/* Main Obelisk Body - Dark Stone/Wood */}
+          {/* Main Obelisk Body - Lighter Stone for visibility */}
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <cylinderGeometry args={[1, 1, 3, 6]} /> {/* Hexagonal Pillar */}
             <meshStandardMaterial 
-                color="#2a1a1a" 
-                metalness={0.1} 
-                roughness={0.9} 
-                emissive={hovered ? '#3e2723' : '#000000'}
+                color="#4a3a3a" 
+                metalness={0.2} 
+                roughness={0.8} 
+                emissive={hovered ? '#3e2723' : '#1a100a'}
                 emissiveIntensity={0.5}
             />
           </mesh>
