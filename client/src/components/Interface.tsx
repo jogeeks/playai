@@ -48,7 +48,7 @@ export function Interface() {
     visible: { 
       opacity: 1,
       transition: { 
-        staggerChildren: 0.05,
+        staggerChildren: 0.03,
         delayChildren: 0.5 
       }
     }
@@ -59,7 +59,7 @@ export function Interface() {
     visible: { 
       opacity: 1, 
       color: '#3e2723', // Cool down to burnt wood color
-      transition: { duration: 0.5 } 
+      transition: { duration: 0.4 } 
     }
   };
 
@@ -179,7 +179,7 @@ export function Interface() {
                   variants={containerVariants}
                   initial="hidden"
                   animate="visible"
-                  className="relative z-10 flex flex-col items-center h-full justify-center gap-4"
+                  className="relative z-10 flex flex-col items-center h-full justify-center gap-4 max-w-[80%]"
                 >
                   {/* Top Icon/Symbol */}
                   <motion.div variants={letterVariants} className="text-[#3e2723]">
@@ -194,33 +194,41 @@ export function Interface() {
                     Divine Mandate
                   </motion.h3>
 
-                  {/* Title */}
-                  <div className="flex flex-wrap justify-center gap-1 my-2">
-                    {mission.title.split('').map((char, i) => (
-                      <motion.span 
-                        key={`title-${i}`} 
-                        variants={letterVariants}
-                        className="font-cinzel text-2xl font-black text-[#3e2723] uppercase tracking-widest"
-                        style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.4), -1px -1px 0px rgba(0,0,0,0.1)' }}
-                      >
-                        {char === ' ' ? '\u00A0' : char}
-                      </motion.span>
+                  {/* Title - Word-based rendering to prevent mid-word breaks */}
+                  <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 my-2">
+                    {mission.title.split(' ').map((word, wordIndex) => (
+                      <div key={`title-word-${wordIndex}`} className="flex">
+                        {word.split('').map((char, charIndex) => (
+                          <motion.span 
+                            key={`title-${wordIndex}-${charIndex}`} 
+                            variants={letterVariants}
+                            className="font-cinzel text-2xl font-black text-[#3e2723] uppercase tracking-widest"
+                            style={{ textShadow: '1px 1px 0px rgba(255,255,255,0.4), -1px -1px 0px rgba(0,0,0,0.1)' }}
+                          >
+                            {char}
+                          </motion.span>
+                        ))}
+                      </div>
                     ))}
                   </div>
 
                   {/* Divider */}
                   <motion.div variants={letterVariants} className="w-24 h-[2px] bg-[#5D4037]/40 my-2"></motion.div>
 
-                  {/* Description - The Core Message */}
-                  <div className="flex flex-wrap justify-center gap-[2px]">
-                    {mission.description.split('').map((char, i) => (
-                      <motion.span 
-                        key={`desc-${i}`} 
-                        variants={letterVariants}
-                        className="font-cinzel text-lg font-bold text-[#4e342e] leading-relaxed"
-                      >
-                        {char === ' ' ? '\u00A0' : char}
-                      </motion.span>
+                  {/* Description - Word-based rendering */}
+                  <div className="flex flex-wrap justify-center gap-x-[6px] gap-y-1">
+                    {mission.description.split(' ').map((word, wordIndex) => (
+                      <div key={`desc-word-${wordIndex}`} className="flex">
+                        {word.split('').map((char, charIndex) => (
+                          <motion.span 
+                            key={`desc-${wordIndex}-${charIndex}`} 
+                            variants={letterVariants}
+                            className="font-cinzel text-lg font-bold text-[#4e342e] leading-relaxed"
+                          >
+                            {char}
+                          </motion.span>
+                        ))}
+                      </div>
                     ))}
                   </div>
 
