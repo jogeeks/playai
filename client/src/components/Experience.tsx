@@ -1,55 +1,31 @@
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, Sky, Html } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import { Machine } from './Machine';
-import { Desert } from './Desert';
-import { Suspense } from 'react';
-
-function Loader() {
-  return (
-    <Html center>
-      <div className="text-cyan-500 font-orbitron animate-pulse">
-        INITIALIZING REALITY...
-      </div>
-    </Html>
-  );
-}
 
 export function Experience() {
   return (
     <div className="w-full h-screen bg-gray-900">
       <Canvas
-        shadows
         camera={{ position: [0, 2, 10], fov: 45 }}
-        gl={{ antialias: true }}
       >
-        {/* Lighting - simplified */}
-        <ambientLight intensity={0.5} color="#4a4a6a" />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#ff9900" />
-        <pointLight position={[-10, 5, -10]} intensity={1} color="#00ffff" />
+        {/* Basic Lighting */}
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1} />
+        
+        {/* Simple Background */}
+        <color attach="background" args={['#111']} />
 
-        {/* Debug Box - OUTSIDE Suspense to prove Canvas works */}
-        <mesh position={[3, 2, 0]}>
-             <boxGeometry />
-             <meshStandardMaterial color="hotpink" />
+        {/* The Machine */}
+        <Machine />
+
+        {/* Debug Cube to verify rendering */}
+        <mesh position={[3, 0, 0]}>
+          <boxGeometry />
+          <meshStandardMaterial color="orange" />
         </mesh>
 
-        <Suspense fallback={<Loader />}>
-          {/* World */}
-          <color attach="background" args={['#050510']} />
-          
-          <group>
-             <Desert />
-             <Machine />
-          </group>
-
-          <OrbitControls 
-            makeDefault
-            minPolarAngle={Math.PI / 4}
-            maxPolarAngle={Math.PI / 2 - 0.05}
-            minDistance={3}
-            maxDistance={20}
-          />
-        </Suspense>
+        {/* Controls */}
+        <OrbitControls />
       </Canvas>
     </div>
   );
