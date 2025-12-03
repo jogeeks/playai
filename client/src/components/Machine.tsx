@@ -70,11 +70,11 @@ export function Machine() {
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
             <cylinderGeometry args={[1, 1, 3, 6]} /> {/* Hexagonal Pillar */}
             <meshStandardMaterial 
-                color="#4a3a3a" 
-                metalness={0.2} 
-                roughness={0.8} 
-                emissive={hovered ? '#3e2723' : '#1a100a'}
-                emissiveIntensity={0.5}
+                color="#d7ccc8" 
+                metalness={0.1} 
+                roughness={0.9} 
+                emissive={hovered ? '#5d4037' : '#2a1a10'}
+                emissiveIntensity={0.2}
             />
           </mesh>
 
