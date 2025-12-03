@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, Text, Sparkles, MeshTransmissionMaterial } from '@react-three/drei';
+import { Float, Text, Sparkles } from '@react-three/drei';
 import { useStore } from '../store';
 import * as THREE from 'three';
 
@@ -77,17 +77,14 @@ export function Machine() {
             />
           </mesh>
 
-          {/* Glass Shell */}
+          {/* Glass Shell - Simplified standard material */}
           <mesh position={[0, 0, 0]}>
             <cylinderGeometry args={[1.1, 1.1, 3.2, 32]} />
-            <meshPhysicalMaterial 
+            <meshStandardMaterial 
                 color="#88ccff"
-                metalness={0.1}
-                roughness={0.1}
-                transmission={0.6}
-                thickness={1} // approximate thickness for transmission
                 transparent
-                opacity={0.5}
+                opacity={0.3}
+                roughness={0}
             />
           </mesh>
 

@@ -2,7 +2,6 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Stars, Sky, Html } from '@react-three/drei';
 import { Machine } from './Machine';
 import { Desert } from './Desert';
-import { useStore } from '../store';
 import { Suspense } from 'react';
 
 function Loader() {
@@ -23,26 +22,25 @@ export function Experience() {
         camera={{ position: [0, 2, 10], fov: 45 }}
         gl={{ antialias: true }}
       >
-        <Suspense fallback={<Loader />}>
-          {/* Debug Box to ensure 3D is working */}
-          <mesh position={[3, 2, 0]}>
+        {/* Lighting - simplified */}
+        <ambientLight intensity={0.5} color="#4a4a6a" />
+        <pointLight position={[10, 10, 10]} intensity={1} color="#ff9900" />
+        <pointLight position={[-10, 5, -10]} intensity={1} color="#00ffff" />
+
+        {/* Debug Box - OUTSIDE Suspense to prove Canvas works */}
+        <mesh position={[3, 2, 0]}>
              <boxGeometry />
              <meshStandardMaterial color="hotpink" />
-          </mesh>
+        </mesh>
 
-          {/* Lighting - simplified */}
-          <ambientLight intensity={0.5} color="#4a4a6a" />
-          <pointLight position={[10, 10, 10]} intensity={1} color="#ff9900" />
-          <pointLight position={[-10, 5, -10]} intensity={1} color="#00ffff" />
-          
+        <Suspense fallback={<Loader />}>
           {/* World */}
           <color attach="background" args={['#050510']} />
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
           
-          {/* Explicitly removed Environment to test if it was blocking */}
-          
-          <Desert />
-          <Machine />
+          <group>
+             <Desert />
+             <Machine />
+          </group>
 
           <OrbitControls 
             makeDefault
