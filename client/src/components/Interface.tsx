@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap, BookOpen } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap, BookOpen, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -189,9 +189,16 @@ export function Interface() {
                 )}
             </AnimatePresence>
           </div>
-          <div className="flex justify-center pt-2">
-            <Button onClick={handleSubmit} disabled={!aspiration.trim()} className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg w-full sm:w-auto">
+          <div className="flex flex-col gap-3 pt-2">
+            <Button onClick={handleSubmit} disabled={!aspiration.trim()} className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg w-full">
               DISPENSE SERENDIPITY
+            </Button>
+            <Button 
+              variant="ghost" 
+              onClick={() => { setInputOpen(false); setActiveMachine(null); }}
+              className="text-[#8d6e63] hover:text-[#ffaa55] hover:bg-transparent font-cinzel text-sm tracking-wider"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" /> RETURN TO PLAYA
             </Button>
           </div>
         </DialogContent>
@@ -243,9 +250,14 @@ export function Interface() {
                     </motion.div>
                     <motion.div initial={{ top: '0%', opacity: 1 }} animate={{ top: '100%', opacity: 0 }} transition={{ duration: 2, ease: "linear" }} className="absolute left-0 right-0 h-[2px] bg-[#ffaa00] shadow-[0_0_20px_rgba(255,170,0,0.8)] z-20 pointer-events-none" />
                 </div>
-                <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex gap-4 w-full justify-center">
-                    <Button onClick={handleDownload} className="bg-[#5D4037] hover:bg-[#3e2723] text-[#D7CCC8] border border-[#D7CCC8]/20 font-cinzel tracking-widest"><Download className="mr-2 h-4 w-4" /> KEEP TOKEN</Button>
-                    <Button onClick={reset} variant="outline" className="bg-black/50 hover:bg-black/70 text-white border-white/20 font-orbitron"><RefreshCw className="mr-2 h-4 w-4" /> NEW SPIN</Button>
+                <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 w-full">
+                    <div className="flex gap-4 justify-center">
+                        <Button onClick={handleDownload} className="bg-[#5D4037] hover:bg-[#3e2723] text-[#D7CCC8] border border-[#D7CCC8]/20 font-cinzel tracking-widest"><Download className="mr-2 h-4 w-4" /> KEEP TOKEN</Button>
+                        <Button onClick={reset} variant="outline" className="bg-black/50 hover:bg-black/70 text-white border-white/20 font-orbitron"><RefreshCw className="mr-2 h-4 w-4" /> NEW SPIN</Button>
+                    </div>
+                    <Button onClick={reset} variant="ghost" className="text-white/50 hover:text-white hover:bg-transparent font-cinzel text-sm tracking-wider">
+                        <ArrowLeft className="w-4 h-4 mr-2" /> RETURN TO PLAYA
+                    </Button>
                 </div>
              </div>
           </motion.div>
@@ -258,7 +270,9 @@ export function Interface() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="absolute right-0 top-0 bottom-0 w-full sm:w-[450px] bg-black/60 backdrop-blur-md border-l border-white/10 pointer-events-auto flex flex-col shadow-2xl z-40">
                 <div className="p-6 border-b border-white/10 flex justify-between items-center">
                     <h2 className="text-xl text-cyan-300 font-cinzel tracking-widest">REFLECTIVE ORACLE</h2>
-                    <Button variant="ghost" size="icon" onClick={resetOracle} className="text-white/50 hover:text-white"><ArrowLeft className="w-5 h-5" /></Button>
+                    <Button variant="ghost" size="icon" onClick={resetOracle} className="text-white/50 hover:text-white hover:bg-white/10" data-testid="button-close-oracle">
+                        <X className="w-5 h-5" />
+                    </Button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
                     {oracleChat.map((msg, idx) => (
@@ -282,6 +296,13 @@ export function Interface() {
                         <Input value={chatInput} onChange={(e) => setChatInput(e.target.value)} placeholder="Reflect..." className="bg-black/20 border-white/20 text-white font-rajdhani focus:border-cyan-400"/>
                         <Button type="submit" size="icon" disabled={!chatInput.trim() || isOracleProcessing} className="bg-cyan-700 hover:bg-cyan-600"><Send className="w-4 h-4" /></Button>
                     </div>
+                    <Button 
+                        variant="ghost" 
+                        onClick={resetOracle}
+                        className="w-full mt-3 text-white/40 hover:text-cyan-300 hover:bg-transparent font-cinzel text-sm tracking-wider"
+                    >
+                        <ArrowLeft className="w-4 h-4 mr-2" /> RETURN TO PLAYA
+                    </Button>
                 </form>
             </motion.div>
         )}
@@ -302,7 +323,7 @@ export function Interface() {
 
                      {/* Close Button */}
                      <Button variant="ghost" size="icon" onClick={resetTemple} className="absolute top-4 right-4 text-[#8d6e63] hover:text-[#ff4400] hover:bg-transparent">
-                         <VolumeX className="w-6 h-6" />
+                         <X className="w-6 h-6" />
                      </Button>
 
                      <h2 className="text-3xl font-cinzel text-[#ff4400] mb-2 tracking-widest drop-shadow-md">TEMPLE OF TRANSMUTATION</h2>
@@ -366,13 +387,22 @@ export function Interface() {
                                 </motion.div>
                              </div>
 
-                             <Button 
-                                onClick={resetTemple} 
-                                variant="outline"
-                                className="mt-8 border-[#ff4400]/30 text-[#ff4400] hover:bg-[#ff4400]/10"
-                             >
-                                 OFFER ANOTHER
-                             </Button>
+                             <div className="flex flex-col items-center gap-3 mt-8">
+                                 <Button 
+                                    onClick={() => { setTransmutation(null); setBurdenInput(''); }}
+                                    variant="outline"
+                                    className="border-[#ff4400]/30 text-[#ff4400] hover:bg-[#ff4400]/10"
+                                 >
+                                     OFFER ANOTHER
+                                 </Button>
+                                 <Button 
+                                    onClick={resetTemple}
+                                    variant="ghost"
+                                    className="text-[#8d6e63] hover:text-[#ff4400] hover:bg-transparent font-cinzel text-sm tracking-wider"
+                                 >
+                                     <ArrowLeft className="w-4 h-4 mr-2" /> RETURN TO PLAYA
+                                 </Button>
+                             </div>
                          </motion.div>
                      )}
                 </div>
