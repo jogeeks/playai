@@ -1,0 +1,59 @@
+AI Serendipity Generator Machine - Full Project Prompt
+Project Overview
+Build a 3D immersive web experience called "AI Serendipity Generator Machine" inspired by Burning Man's desert aesthetic. Users explore a mystical desert environment and interact with an AI-powered oracle machine that generates personalized "serendipity missions" based on their aspirations.
+
+Tech Stack
+Frontend: React + TypeScript + Vite
+3D Graphics: React Three Fiber (@react-three/fiber, @react-three/drei)
+State Management: Zustand with subscribeWithSelector middleware
+Animations: Framer Motion
+Styling: Tailwind CSS with custom gradients
+UI Components: Radix UI primitives (Button, Card, Textarea)
+Icons: Lucide React
+Core Features
+1. Desert 3D Environment
+Procedurally generated terrain with rolling sand dunes using sine wave displacement
+Gradient sky dome (orange sunset to deep blue with stars)
+Distant silhouettes representing art installations
+Ground fog effect with additive blending
+Atmospheric fog (distance-based)
+2. AI Serendipity Machine
+Futuristic cylindrical design with:
+Metallic body with glow rings (cyan/blue)
+Animated LED strips
+Holographic display panels with scan lines
+Particle emitters around the base
+Central glowing core sphere
+Top dome with transparency
+Floating animation (sine wave hover)
+Processing state animation (faster rotation, scale pulsing)
+Changes color when processing (blue → orange)
+3. User Interaction Flow
+User "approaches" the machine (currently simulated - isNearMachine state)
+Input modal appears with glowing cyberpunk styling
+User enters aspiration (max 150 characters)
+Processing animation with progress steps:
+"Analyzing input..."
+"Extracting keywords..."
+"Consulting wisdom database..."
+"Weaving possibilities..."
+"Calibrating serendipity..."
+"Mission generated!"
+Animated mission parchment appears with:
+Mission type icon and color theme
+Personalized title and description
+Letter-by-letter reveal animation
+Download option (saves as .txt file)
+Generate new mission option
+4. Mission Types (5 categories)
+Connection (pink/purple): Social/relationship missions
+Creativity (orange/red): Artistic expression missions
+Adventure (green/teal): Exploration missions
+Learning (blue/indigo): Knowledge-seeking missions
+Self-Discovery (purple/pink): Introspection missions
+5. UI/HUD Elements
+Top-left: Game title with backdrop blur
+Top-right: Audio toggle (M key), Help toggle
+Bottom-center: Context-aware instructions
+Help overlay: Full tutorial with controls and mission explanations
+Keyboard shortcuts: M (mute), F (fullscreen)
