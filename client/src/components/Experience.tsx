@@ -31,25 +31,24 @@ export function Experience() {
             distance={50}
         />
 
-        <Suspense fallback={null}>
-          {/* World */}
-          <color attach="background" args={['#080503']} /> {/* Dark warm brown-black */}
-          <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={0.5} />
-          
-          <group>
-             <Desert />
-             <Machine />
-          </group>
+        {/* REMOVED SUSPENSE TO PREVENT LOADING HANGS */}
+        {/* World */}
+        <color attach="background" args={['#080503']} /> {/* Dark warm brown-black */}
+        <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={0.5} />
+        
+        <group>
+           <Desert />
+           <Machine />
+        </group>
 
-          <OrbitControls 
-            makeDefault
-            minPolarAngle={Math.PI / 4}
-            maxPolarAngle={Math.PI / 2 - 0.05}
-            minDistance={3}
-            maxDistance={20}
-            enablePan={false}
-          />
-        </Suspense>
+        <OrbitControls 
+          makeDefault
+          minPolarAngle={Math.PI / 4}
+          maxPolarAngle={Math.PI / 2 - 0.05}
+          minDistance={3}
+          maxDistance={20}
+          enablePan={false}
+        />
       </Canvas>
     </div>
   );

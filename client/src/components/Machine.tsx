@@ -118,13 +118,12 @@ export function Machine() {
             color="#ffd700"
           />
 
-          {/* Label if not near */}
+          {/* Label if not near - REMOVED FONT PROP TO PREVENT LOADING HANG */}
           {!isNearMachine && (
             <Text
               position={[0, 2.5, 0]}
               fontSize={0.15}
               color="#ffddaa"
-              font="https://fonts.gstatic.com/s/cinzel/v11/8vIJ7ww63mVu7gt78Uk.woff"
               anchorX="center"
               anchorY="middle"
               letterSpacing={0.2}
