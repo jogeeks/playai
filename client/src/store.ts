@@ -22,6 +22,12 @@ interface ChatMessage {
   content: string;
 }
 
+interface Transmutation {
+  original: string;
+  insight: string;
+  wisdom: string;
+}
+
 interface State {
   activeMachine: 'dispenser' | 'oracle' | 'temple' | null;
   
@@ -37,8 +43,8 @@ interface State {
   isOracleProcessing: boolean;
 
   // Temple State
-  isReleasing: boolean;
-  releasedBurdens: number;
+  isTransmuting: boolean;
+  transmutation: Transmutation | null;
 
   // Global State
   audioEnabled: boolean;
@@ -59,7 +65,8 @@ interface State {
   resetOracle: () => void;
 
   // Temple Actions
-  releaseBurden: (burden: string) => Promise<void>;
+  transmuteBurden: (burden: string) => Promise<void>;
+  resetTemple: () => void;
 
   // Global Actions
   toggleAudio: () => void;
@@ -83,6 +90,39 @@ const ORACLE_RESPONSES = [
   "Silence is also an answer. Listen to it.",
   "You are the art you have been looking for."
 ];
+
+const TRANSMUTATION_DB = [
+    {
+        keywords: ['fear', 'afraid', 'scared', 'anxiety'],
+        insight: "Fear is merely the border of your known reality.",
+        wisdom: "Let this fear become Curiosity. Explore the unknown without the tether of expectation."
+    },
+    {
+        keywords: ['regret', 'mistake', 'past', 'sorry'],
+        insight: "The past is a lesson, not a life sentence.",
+        wisdom: "Let this regret become Experience. You have already paid the price; now keep the lesson."
+    },
+    {
+        keywords: ['anger', 'mad', 'hate', 'furious'],
+        insight: "Your fire can destroy, or it can forge.",
+        wisdom: "Let this anger become Passion. Direct this heat towards creating something beautiful."
+    },
+    {
+        keywords: ['sad', 'grief', 'loss', 'cry'],
+        insight: "Sorrow carves the space where joy will one day reside.",
+        wisdom: "Let this sadness become Depth. Your capacity to feel is your greatest strength."
+    },
+    {
+        keywords: ['tired', 'exhausted', 'burnout', 'drained'],
+        insight: "Even the sun must set to rise again.",
+        wisdom: "Let this exhaustion become Rest. Surrender to the pause, for it is part of the music."
+    }
+];
+
+const DEFAULT_TRANSMUTATION = {
+    insight: "To release is to make space for the new.",
+    wisdom: "Let this burden become Ash, fertilizing the soil for your next bloom."
+};
 
 const MOCK_MISSIONS: Record<MissionCategory, Mission[]> = {
   Connection: [
@@ -134,8 +174,8 @@ export const useStore = create(
     oracleChat: [{ role: 'oracle', content: "I am the Reflective Oracle. I see what you hide. Speak." }],
     isOracleProcessing: false,
     
-    isReleasing: false,
-    releasedBurdens: 0,
+    isTransmuting: false,
+    transmutation: null,
 
     setActiveMachine: (machine) => set({ 
         activeMachine: machine, 
@@ -167,7 +207,6 @@ export const useStore = create(
             isOracleProcessing: true 
         }));
 
-        // Mock AI delay
         await new Promise(resolve => setTimeout(resolve, 1500));
 
         const randomResponse = ORACLE_RESPONSES[Math.floor(Math.random() * ORACLE_RESPONSES.length)];
@@ -183,15 +222,28 @@ export const useStore = create(
         activeMachine: null
     }),
 
-    releaseBurden: async (burden) => {
-      set({ isReleasing: true });
-      // Simulate burning time
+    transmuteBurden: async (burden) => {
+      set({ isTransmuting: true });
+      
+      // Analyze burden (basic keyword matching for mockup)
+      const lowerBurden = burden.toLowerCase();
+      const match = TRANSMUTATION_DB.find(t => t.keywords.some(k => lowerBurden.includes(k)));
+      const result = match || DEFAULT_TRANSMUTATION;
+
+      // Simulate alchemy time
       await new Promise(resolve => setTimeout(resolve, 3000));
-      set((state) => ({ 
-        isReleasing: false, 
-        releasedBurdens: state.releasedBurdens + 1 
-      }));
+      
+      set({ 
+        isTransmuting: false, 
+        transmutation: {
+            original: burden,
+            insight: result.insight,
+            wisdom: result.wisdom
+        }
+      });
     },
+
+    resetTemple: () => set({ transmutation: null, activeMachine: null }),
 
     toggleAdvancedMode: () => set((state) => ({ isAdvancedMode: !state.isAdvancedMode })),
     updateAdvancedSettings: (settings) => set((state) => ({ 
