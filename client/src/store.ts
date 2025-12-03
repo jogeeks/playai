@@ -12,41 +12,69 @@ export interface Mission {
 }
 
 interface AdvancedSettings {
-  intensity: number; // 0 (Mild) to 100 (Wild)
-  social: number;    // 0 (Solo) to 100 (Group)
-  weirdness: number; // 0 (Grounded) to 100 (Absurd)
+  intensity: number;
+  social: number;
+  weirdness: number;
+}
+
+interface ChatMessage {
+  role: 'oracle' | 'user';
+  content: string;
 }
 
 interface State {
-  isNearMachine: boolean;
+  activeMachine: 'dispenser' | 'oracle' | null;
+  
+  // Dispenser State
   isInputOpen: boolean;
-  processingStep: string | null; // null if not processing
+  processingStep: string | null;
   mission: Mission | null;
+  advancedSettings: AdvancedSettings;
+  isAdvancedMode: boolean;
+
+  // Oracle State
+  oracleChat: ChatMessage[];
+  isOracleProcessing: boolean;
+
+  // Global State
   audioEnabled: boolean;
   isInfoOpen: boolean;
-  
-  // Advanced Mode
-  isAdvancedMode: boolean;
-  advancedSettings: AdvancedSettings;
 
   // Actions
-  setNearMachine: (near: boolean) => void;
+  setActiveMachine: (machine: 'dispenser' | 'oracle' | null) => void;
   setInputOpen: (open: boolean) => void;
+  
+  // Dispenser Actions
   startProcessing: (aspiration: string) => Promise<void>;
   reset: () => void;
-  toggleAudio: () => void;
-  toggleInfo: () => void;
   toggleAdvancedMode: () => void;
   updateAdvancedSettings: (settings: Partial<AdvancedSettings>) => void;
+
+  // Oracle Actions
+  sendOracleMessage: (message: string) => Promise<void>;
+  resetOracle: () => void;
+
+  // Global Actions
+  toggleAudio: () => void;
+  toggleInfo: () => void;
 }
 
-const PROCESSING_STEPS = [
+const DISPENSER_STEPS = [
   "Calibrating serendipity sensors...",
   "Scanning Playa vibes...",
   "Injecting controlled chaos...",
   "Aligning with the dust...",
   "Manifesting opportunity...",
   "Dispensing serendipity!"
+];
+
+const ORACLE_RESPONSES = [
+  "Why do you seek what you seek?",
+  "The mirror reveals only what you bring to it. Look closer.",
+  "Is your journey truly your own, or are you following the dust of others?",
+  "What would you do if no one was watching?",
+  "Silence is also an answer. Listen to it.",
+  "You are the art you have been looking for."
 ];
 
 const MOCK_MISSIONS: Record<MissionCategory, Mission[]> = {
@@ -84,51 +112,73 @@ const MOCK_MISSIONS: Record<MissionCategory, Mission[]> = {
 
 export const useStore = create(
   subscribeWithSelector<State>((set, get) => ({
-    isNearMachine: false,
+    activeMachine: null,
     isInputOpen: false,
     processingStep: null,
     mission: null,
     audioEnabled: true,
     isInfoOpen: false,
-    
     isAdvancedMode: false,
     advancedSettings: {
       intensity: 50,
       social: 50,
       weirdness: 50
     },
+    oracleChat: [{ role: 'oracle', content: "I am the Reflective Oracle. I see what you hide. Speak." }],
+    isOracleProcessing: false,
 
-    setNearMachine: (near) => set({ isNearMachine: near, isInputOpen: near }),
+    setActiveMachine: (machine) => set({ 
+        activeMachine: machine, 
+        isInputOpen: machine === 'dispenser',
+        isInfoOpen: false
+    }),
     
     setInputOpen: (open) => set({ isInputOpen: open }),
 
     startProcessing: async (aspiration) => {
-      set({ isInputOpen: false, processingStep: PROCESSING_STEPS[0] });
-
-      // Simulate processing steps
-      for (let i = 1; i < PROCESSING_STEPS.length; i++) {
+      set({ isInputOpen: false, processingStep: DISPENSER_STEPS[0] });
+      for (let i = 1; i < DISPENSER_STEPS.length; i++) {
         await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 500));
-        set({ processingStep: PROCESSING_STEPS[i] });
+        set({ processingStep: DISPENSER_STEPS[i] });
       }
-
-      // Generate random mission based on "aspiration" (random for now)
       const categories = Object.keys(MOCK_MISSIONS) as MissionCategory[];
       const randomCat = categories[Math.floor(Math.random() * categories.length)];
       const missions = MOCK_MISSIONS[randomCat];
       const randomMission = missions[Math.floor(Math.random() * missions.length)];
-
       await new Promise(resolve => setTimeout(resolve, 500));
       set({ processingStep: null, mission: randomMission });
     },
 
-    reset: () => set({ mission: null, isNearMachine: false, processingStep: null }),
+    reset: () => set({ mission: null, activeMachine: null, processingStep: null }),
 
-    toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
-    toggleInfo: () => set((state) => ({ isInfoOpen: !state.isInfoOpen })),
-    
+    sendOracleMessage: async (message) => {
+        set((state) => ({ 
+            oracleChat: [...state.oracleChat, { role: 'user', content: message }],
+            isOracleProcessing: true 
+        }));
+
+        // Mock AI delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        const randomResponse = ORACLE_RESPONSES[Math.floor(Math.random() * ORACLE_RESPONSES.length)];
+        
+        set((state) => ({
+            oracleChat: [...state.oracleChat, { role: 'oracle', content: randomResponse }],
+            isOracleProcessing: false
+        }));
+    },
+
+    resetOracle: () => set({ 
+        oracleChat: [{ role: 'oracle', content: "I am the Reflective Oracle. I see what you hide. Speak." }],
+        activeMachine: null
+    }),
+
     toggleAdvancedMode: () => set((state) => ({ isAdvancedMode: !state.isAdvancedMode })),
     updateAdvancedSettings: (settings) => set((state) => ({ 
       advancedSettings: { ...state.advancedSettings, ...settings } 
     })),
+
+    toggleAudio: () => set((state) => ({ audioEnabled: !state.audioEnabled })),
+    toggleInfo: () => set((state) => ({ isInfoOpen: !state.isInfoOpen })),
   }))
 );

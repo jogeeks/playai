@@ -11,8 +11,8 @@ export function Machine() {
   const floorRef = useRef<THREE.Group>(null);
   
   const [hovered, setHover] = useState(false);
-  const { isNearMachine, setNearMachine, processingStep } = useStore();
-  
+  const { activeMachine, setActiveMachine, processingStep } = useStore();
+  const isNearMachine = activeMachine === 'dispenser';
   const isProcessing = !!processingStep;
 
   useFrame((state, delta) => {
@@ -51,7 +51,7 @@ export function Machine() {
   };
 
   const handleClick = () => {
-    setNearMachine(true);
+    setActiveMachine('dispenser');
   };
 
   // Colors for Divine Theme
@@ -59,7 +59,7 @@ export function Machine() {
   const wireColor = isProcessing ? '#ff5500' : '#ffcc00'; // Amber/Gold
 
   return (
-    <group position={[0, 1.5, 0]}>
+    <group position={[-6, 1.5, -2]}>
       <Float speed={2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[0, 0.3]}>
         <group 
             ref={group}

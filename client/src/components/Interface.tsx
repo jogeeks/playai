@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Sliders } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
@@ -11,7 +12,8 @@ import { Switch } from '@/components/ui/switch';
 
 export function Interface() {
   const { 
-    isNearMachine, 
+    activeMachine,
+    setActiveMachine,
     isInputOpen, 
     setInputOpen, 
     startProcessing, 
@@ -25,14 +27,32 @@ export function Interface() {
     isAdvancedMode,
     toggleAdvancedMode,
     advancedSettings,
-    updateAdvancedSettings
+    updateAdvancedSettings,
+    oracleChat,
+    isOracleProcessing,
+    sendOracleMessage,
+    resetOracle
   } = useStore();
 
   const [aspiration, setAspiration] = useState('');
+  const [chatInput, setChatInput] = useState('');
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [oracleChat]);
 
   const handleSubmit = () => {
     if (aspiration.trim()) {
       startProcessing(aspiration);
+    }
+  };
+
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (chatInput.trim() && !isOracleProcessing) {
+        sendOracleMessage(chatInput);
+        setChatInput('');
     }
   };
 
@@ -75,24 +95,29 @@ export function Interface() {
       {/* HUD Header */}
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-auto z-50">
         <div className="p-2">
-          <h1 className="text-2xl font-bold text-[#ffaa55] tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(255,100,0,0.5)]">
-            SERENDIPITY DISPENSER
+          <h1 className="text-2xl font-bold text-white tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+            {activeMachine === 'oracle' ? 'REFLECTIVE ORACLE' : 'PLAYA ARTIFACTS'}
           </h1>
-          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffaa55] to-transparent mt-1 opacity-50"></div>
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white to-transparent mt-1 opacity-50"></div>
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
+          <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-white/30 text-white hover:bg-white/20 hover:text-white">
             {audioEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </Button>
-          <Button variant="outline" size="icon" onClick={toggleInfo} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
+          <Button variant="outline" size="icon" onClick={toggleInfo} className="bg-black/40 border-white/30 text-white hover:bg-white/20 hover:text-white">
             <Info className="h-4 w-4" />
           </Button>
         </div>
       </header>
 
+      {/* ----- DISPENSER INTERFACE ----- */}
+      
       {/* Input Modal */}
-      <Dialog open={isInputOpen} onOpenChange={setInputOpen}>
+      <Dialog open={isInputOpen} onOpenChange={(open) => {
+          setInputOpen(open);
+          if (!open) setActiveMachine(null);
+      }}>
         <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] sm:max-w-[550px] pointer-events-auto shadow-[0_0_50px_rgba(0,0,0,0.8)] max-h-[90vh] overflow-y-auto scrollbar-hide">
           <DialogHeader>
             <DialogTitle className="text-[#ffaa55] font-cinzel tracking-widest text-xl text-center border-b border-[#ffaa55]/20 pb-4">
@@ -352,6 +377,72 @@ export function Interface() {
         )}
       </AnimatePresence>
 
+      {/* ----- ORACLE INTERFACE ----- */}
+      <AnimatePresence>
+        {activeMachine === 'oracle' && (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="absolute right-0 top-0 bottom-0 w-full sm:w-[450px] bg-black/60 backdrop-blur-md border-l border-white/10 pointer-events-auto flex flex-col shadow-2xl z-40"
+            >
+                <div className="p-6 border-b border-white/10 flex justify-between items-center">
+                    <h2 className="text-xl text-cyan-300 font-cinzel tracking-widest">REFLECTIVE ORACLE</h2>
+                    <Button variant="ghost" size="icon" onClick={resetOracle} className="text-white/50 hover:text-white">
+                        <ArrowLeft className="w-5 h-5" />
+                    </Button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    {oracleChat.map((msg, idx) => (
+                        <motion.div 
+                            key={idx}
+                            initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                            <div className={`max-w-[85%] p-4 rounded-lg text-sm font-rajdhani leading-relaxed ${
+                                msg.role === 'user' 
+                                ? 'bg-cyan-900/40 border border-cyan-500/30 text-cyan-100' 
+                                : 'bg-white/5 border border-white/10 text-gray-200 italic'
+                            }`}>
+                                {msg.content}
+                            </div>
+                        </motion.div>
+                    ))}
+                    {isOracleProcessing && (
+                         <motion.div 
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex justify-start"
+                         >
+                             <div className="bg-white/5 border border-white/10 p-4 rounded-lg flex gap-1">
+                                 <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                 <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                 <div className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                             </div>
+                         </motion.div>
+                    )}
+                    <div ref={chatEndRef} />
+                </div>
+
+                <form onSubmit={handleChatSubmit} className="p-4 border-t border-white/10 bg-black/40">
+                    <div className="flex gap-2">
+                        <Input 
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            placeholder="Reflect..."
+                            className="bg-black/20 border-white/20 text-white font-rajdhani focus:border-cyan-400"
+                        />
+                        <Button type="submit" size="icon" disabled={!chatInput.trim() || isOracleProcessing} className="bg-cyan-700 hover:bg-cyan-600">
+                            <Send className="w-4 h-4" />
+                        </Button>
+                    </div>
+                </form>
+            </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Info / Philosophy Overlay */}
       <Dialog open={isInfoOpen} onOpenChange={toggleInfo}>
         <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto max-w-2xl">
@@ -392,10 +483,10 @@ export function Interface() {
       </Dialog>
 
       {/* Footer Hint */}
-      {!isNearMachine && !mission && (
+      {!activeMachine && !mission && (
         <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">
-            <p className="text-[#ffaa55]/50 font-cinzel tracking-[0.3em] text-sm animate-pulse">
-                APPROACH THE DISPENSER
+            <p className="text-white/70 font-cinzel tracking-[0.3em] text-sm animate-pulse bg-black/20 inline-block px-4 py-2 rounded backdrop-blur-sm">
+                CHOOSE YOUR PATH: DISPENSER OR ORACLE
             </p>
         </div>
       )}

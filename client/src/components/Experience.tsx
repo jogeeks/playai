@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sky } from '@react-three/drei';
 import { Machine } from './Machine';
+import { ReflectiveOracle } from './ReflectiveOracle';
 import { Desert } from './Desert';
 import { Suspense } from 'react';
 
@@ -44,6 +45,7 @@ export function Experience() {
         <group>
            <Desert />
            <Machine />
+           <ReflectiveOracle />
         </group>
 
         <OrbitControls 
