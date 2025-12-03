@@ -80,14 +80,14 @@ export function Machine() {
           {/* Glass Shell */}
           <mesh position={[0, 0, 0]}>
             <cylinderGeometry args={[1.1, 1.1, 3.2, 32]} />
-            <MeshTransmissionMaterial 
-                backside
-                thickness={0.2}
-                roughness={0.1}
-                transmission={0.9}
-                chromaticAberration={0.1}
-                anisotropy={0.1}
+            <meshPhysicalMaterial 
                 color="#88ccff"
+                metalness={0.1}
+                roughness={0.1}
+                transmission={0.6}
+                thickness={1} // approximate thickness for transmission
+                transparent
+                opacity={0.5}
             />
           </mesh>
 

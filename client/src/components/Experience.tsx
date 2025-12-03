@@ -29,8 +29,10 @@ export function Experience() {
             penumbra={1} 
             intensity={1} 
             castShadow 
-            color="#cyan"
+            color="#00ffff"
           />
+
+          <Environment preset="city" />
 
           {/* World */}
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />

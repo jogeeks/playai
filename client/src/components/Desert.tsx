@@ -23,10 +23,8 @@ export function Desert() {
       receiveShadow
     >
       <planeGeometry args={[100, 100, 64, 64]} />
-      <MeshDistortMaterial 
+      <meshStandardMaterial 
         color="#C76B38" /* Sand color */
-        distort={0.4} 
-        speed={0.2} 
         roughness={0.8}
         metalness={0.1}
       />
