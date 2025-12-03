@@ -1,40 +1,45 @@
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import { OrbitControls, Sky } from '@react-three/drei';
 import { Machine } from './Machine';
 import { Desert } from './Desert';
 import { Suspense } from 'react';
 
 export function Experience() {
   return (
-    <div className="w-full h-screen bg-[#0a0500]">
+    <div className="w-full h-screen bg-[#87CEEB]">
       <Canvas
         shadows
         camera={{ position: [0, 2, 10], fov: 45 }}
         gl={{ antialias: true }}
       >
-        {/* Lighting - Significantly Boosted for Visibility */}
-        <hemisphereLight intensity={1} groundColor="#111111" color="#443322" />
-        <ambientLight intensity={0.8} color="#aa8866" />
+        {/* Day Lighting */}
+        <hemisphereLight intensity={0.6} groundColor="#E6C288" color="#87CEEB" />
+        <ambientLight intensity={0.5} color="#ffffff" />
         
-        {/* Golden Rim Light */}
-        <pointLight position={[10, 10, 10]} intensity={3} color="#ffaa55" />
-        <pointLight position={[-10, 5, -10]} intensity={2} color="#4466aa" />
-        
-        {/* Divine Spotlight from Above */}
-        <spotLight 
-            position={[0, 20, 0]} 
-            angle={0.6} 
-            penumbra={0.5} 
-            intensity={5} 
+        {/* Sun Light */}
+        <directionalLight 
+            position={[50, 100, 50]} 
+            intensity={1.5} 
             castShadow 
-            color="#ffcc88"
-            distance={50}
+            shadow-mapSize={[2048, 2048]}
+            color="#fffbe6"
         />
+        {/* Fill Light */}
+        <pointLight position={[-10, 5, -10]} intensity={0.5} color="#90d3ff" />
 
-        {/* REMOVED SUSPENSE TO PREVENT LOADING HANGS */}
         {/* World */}
-        <color attach="background" args={['#080503']} /> {/* Dark warm brown-black */}
-        <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={0.5} />
+        <color attach="background" args={['#87CEEB']} />
+        <fog attach="fog" args={['#87CEEB', 15, 60]} />
+        
+        {/* Sky Shader for nice sun/atmosphere */}
+        <Sky 
+            distance={450000} 
+            sunPosition={[10, 10, 10]} 
+            inclination={0.6} 
+            azimuth={0.25} 
+            turbidity={10}
+            rayleigh={0.5}
+        />
         
         <group>
            <Desert />
