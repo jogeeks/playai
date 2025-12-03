@@ -31,6 +31,7 @@
 
   --font-orbitron: 'Orbitron', sans-serif;
   --font-rajdhani: 'Rajdhani', sans-serif;
+  --font-cinzel: 'Cinzel', serif;
   
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -38,43 +39,43 @@
 }
 
 :root {
-  /* Dark Cyberpunk Desert Theme */
-  --background: 222 47% 11%; /* Deep Night Blue */
-  --foreground: 210 40% 98%;
+  /* Divine/Ancient Theme */
+  --background: 0 0% 5%; /* Deep Black Void */
+  --foreground: 35 30% 85%; /* Parchment White */
 
-  --card: 222 47% 11%;
-  --card-foreground: 210 40% 98%;
+  --card: 25 20% 10%; /* Dark Brown Stone */
+  --card-foreground: 35 30% 85%;
 
-  --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 25 20% 10%;
+  --popover-foreground: 35 30% 85%;
 
-  --primary: 180 100% 50%; /* Cyan Glow */
-  --primary-foreground: 222 47% 11%;
+  --primary: 45 100% 50%; /* Golden Light */
+  --primary-foreground: 0 0% 10%;
 
-  --secondary: 30 100% 50%; /* Orange Sunset/Sand */
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 25 40% 30%; /* Clay/Bronze */
+  --secondary-foreground: 35 30% 90%;
 
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;
+  --muted: 25 20% 20%;
+  --muted-foreground: 25 10% 60%;
 
-  --accent: 217 33% 17%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 45 80% 20%; /* Deep Gold */
+  --accent-foreground: 45 100% 80%;
 
-  --destructive: 0 62% 30%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 0 60% 30%;
+  --destructive-foreground: 0 0% 95%;
 
-  --border: 217 33% 17%;
-  --input: 217 33% 17%;
-  --ring: 180 100% 50%; /* Cyan Ring */
+  --border: 35 20% 20%;
+  --input: 35 20% 15%;
+  --ring: 45 100% 50%; /* Gold Ring */
 
   --radius: 0.5rem;
 
-  /* Mission Type Colors */
-  --mission-connection: 320 100% 60%; /* Pink/Purple */
-  --mission-creativity: 15 100% 60%; /* Orange/Red */
-  --mission-adventure: 160 100% 50%; /* Green/Teal */
-  --mission-learning: 220 100% 60%; /* Blue/Indigo */
-  --mission-self: 280 100% 60%; /* Purple/Pink */
+  /* Mission Type Colors - More Muted/Earthy */
+  --mission-connection: 330 60% 60%; /* Rose */
+  --mission-creativity: 30 80% 60%; /* Amber */
+  --mission-adventure: 150 40% 50%; /* Emerald */
+  --mission-learning: 210 50% 60%; /* Sapphire */
+  --mission-self: 270 40% 60%; /* Amethyst */
 }
 
 @layer base {
@@ -85,6 +86,6 @@
     @apply font-rajdhani antialiased bg-background text-foreground overflow-hidden;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-orbitron;
+    @apply font-cinzel;
   }
 }

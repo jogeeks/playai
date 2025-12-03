@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, HelpCircle, X, Download, RefreshCw, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, HelpCircle, Download, RefreshCw, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -64,21 +64,21 @@ export function Interface() {
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute inset-0 pointer-events-none font-cinzel">
       {/* HUD Header */}
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-start pointer-events-auto z-50">
-        <div className="backdrop-blur-sm bg-black/20 p-2 rounded border border-white/10">
-          <h1 className="text-2xl font-bold text-white tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            SERENDIPITY ORACLE
+        <div className="p-2">
+          <h1 className="text-2xl font-bold text-[#ffaa55] tracking-[0.2em] drop-shadow-[0_2px_10px_rgba(255,100,0,0.5)]">
+            ORACLE OF AGES
           </h1>
-          <p className="text-xs text-cyan-200/60 font-mono">SYS.VER.3.0 // ONLINE</p>
+          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-[#ffaa55] to-transparent mt-1 opacity-50"></div>
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-cyan-500/30 text-cyan-400 hover:bg-cyan-900/20 hover:text-cyan-200">
+          <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
             {audioEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </Button>
-          <Button variant="outline" size="icon" onClick={toggleHelp} className="bg-black/40 border-cyan-500/30 text-cyan-400 hover:bg-cyan-900/20 hover:text-cyan-200">
+          <Button variant="outline" size="icon" onClick={toggleHelp} className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-[#ffddaa]">
             <HelpCircle className="h-4 w-4" />
           </Button>
         </div>
@@ -86,33 +86,31 @@ export function Interface() {
 
       {/* Input Modal */}
       <Dialog open={isInputOpen} onOpenChange={setInputOpen}>
-        <DialogContent className="bg-black/90 border-cyan-500/50 text-white sm:max-w-[425px] pointer-events-auto backdrop-blur-xl">
+        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] sm:max-w-[425px] pointer-events-auto shadow-[0_0_50px_rgba(0,0,0,0.8)]">
           <DialogHeader>
-            <DialogTitle className="text-cyan-400 font-orbitron tracking-wider">COMMUNE WITH THE ORACLE</DialogTitle>
-            <DialogDescription className="text-cyan-100/60 font-rajdhani">
-              State your current aspiration. The machine will etch your fate.
+            <DialogTitle className="text-[#ffaa55] font-cinzel tracking-widest text-xl text-center border-b border-[#ffaa55]/20 pb-4">
+              COMMUNE WITH THE DIVINE
+            </DialogTitle>
+            <DialogDescription className="text-[#ccaa88] font-rajdhani text-center pt-4 text-lg">
+              What burden or dream do you carry? Speak, and the machine shall etch your path.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <Textarea 
-              placeholder="I seek to find beauty in the mundane..." 
+              placeholder="I seek guidance on..." 
               value={aspiration}
               onChange={(e) => setAspiration(e.target.value)}
-              className="bg-black/50 border-cyan-800 focus:border-cyan-400 text-cyan-100 font-rajdhani h-32 resize-none"
+              className="bg-black/40 border-[#5d4037] focus:border-[#ffaa55] text-[#ffddaa] font-rajdhani h-32 resize-none text-lg italic"
               maxLength={150}
             />
-            <div className="flex justify-between items-center text-xs text-cyan-500/50">
-                <span>{aspiration.length}/150 CHARS</span>
-                <span>NEURAL LINK ACTIVE</span>
-            </div>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-center">
             <Button 
                 onClick={handleSubmit} 
                 disabled={!aspiration.trim()}
-                className="bg-cyan-600 hover:bg-cyan-500 text-white font-orbitron tracking-widest border border-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.3)]"
+                className="bg-[#5d4037] hover:bg-[#8d6e63] text-[#ffddaa] font-cinzel tracking-widest border border-[#ffaa55]/50 shadow-[0_0_20px_rgba(255,170,85,0.2)] px-8 py-6 text-lg"
             >
-              INITIATE SEQUENCE
+              OFFER TO THE ORACLE
             </Button>
           </div>
         </DialogContent>
@@ -125,16 +123,16 @@ export function Interface() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-40"
+            className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm z-40"
           >
             <div className="text-center">
-                <div className="w-16 h-16 border-4 border-t-cyan-400 border-r-transparent border-b-cyan-400 border-l-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <div className="w-20 h-20 border-4 border-t-[#ffaa55] border-r-transparent border-b-[#ffaa55] border-l-transparent rounded-full animate-spin mx-auto mb-8 shadow-[0_0_30px_rgba(255,170,85,0.4)]"></div>
                 <motion.h2 
                     key={processingStep}
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -10, opacity: 0 }}
-                    className="text-2xl text-cyan-400 font-orbitron tracking-widest"
+                    className="text-3xl text-[#ffaa55] font-cinzel tracking-[0.2em]"
                 >
                     {processingStep}
                 </motion.h2>
@@ -240,7 +238,7 @@ export function Interface() {
                   initial={{ top: '0%', opacity: 1 }}
                   animate={{ top: '100%', opacity: 0 }}
                   transition={{ duration: 2, ease: "linear" }}
-                  className="absolute left-0 right-0 h-[2px] bg-cyan-500/50 shadow-[0_0_20px_rgba(0,255,255,0.8)] z-20 pointer-events-none"
+                  className="absolute left-0 right-0 h-[2px] bg-[#ffaa00] shadow-[0_0_20px_rgba(255,170,0,0.8)] z-20 pointer-events-none"
                 />
               </div>
 
@@ -267,15 +265,15 @@ export function Interface() {
 
       {/* Help Overlay */}
       <Dialog open={isHelpOpen} onOpenChange={toggleHelp}>
-        <DialogContent className="bg-black/95 border-cyan-900 text-white pointer-events-auto">
+        <DialogContent className="bg-[#1a100a] border-[#ffaa55]/30 text-[#ffddaa] pointer-events-auto">
             <DialogHeader>
-                <DialogTitle className="font-orbitron text-cyan-400">OPERATIONAL GUIDE</DialogTitle>
+                <DialogTitle className="font-cinzel text-[#ffaa55]">OPERATIONAL GUIDE</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 font-rajdhani text-lg">
-                <p>1. Drag to explore the desert environment.</p>
-                <p>2. Click the Floating Monolith to commune with the Oracle.</p>
-                <p>3. Offer your aspiration to the machine.</p>
-                <p>4. Receive a Divine Token etched with your serendipity mission.</p>
+                <p>1. Drag to explore the sacred void.</p>
+                <p>2. Click the Golden Obelisk to commune.</p>
+                <p>3. Offer your soul's query.</p>
+                <p>4. Receive the divine mandate etched in wood.</p>
             </div>
         </DialogContent>
       </Dialog>
@@ -283,8 +281,8 @@ export function Interface() {
       {/* Footer Hint */}
       {!isNearMachine && !mission && (
         <div className="absolute bottom-8 left-0 w-full text-center pointer-events-none">
-            <p className="text-cyan-200/50 font-orbitron tracking-[0.2em] text-sm animate-pulse">
-                APPROACH THE MACHINE
+            <p className="text-[#ffaa55]/50 font-cinzel tracking-[0.3em] text-sm animate-pulse">
+                APPROACH THE OBELISK
             </p>
         </div>
       )}

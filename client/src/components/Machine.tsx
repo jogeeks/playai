@@ -53,9 +53,9 @@ export function Machine() {
     setNearMachine(true);
   };
 
-  // Colors
-  const coreColor = isProcessing ? '#ff9900' : '#00ffff';
-  const glowColor = isProcessing ? '#ff5500' : '#0088ff';
+  // Colors for Divine Theme
+  const coreColor = isProcessing ? '#ffaa00' : '#ffddaa'; // Golden Glow
+  const glowColor = isProcessing ? '#ff5500' : '#ffcc00'; // Amber/Gold
 
   return (
     <group position={[0, 1.5, 0]}>
@@ -66,67 +66,70 @@ export function Machine() {
             onPointerOver={handlePointerOver}
             onPointerOut={handlePointerOut}
         >
-          {/* Main Cylinder Body */}
+          {/* Main Obelisk Body - Dark Stone/Wood */}
           <mesh position={[0, 0, 0]} castShadow receiveShadow>
-            <cylinderGeometry args={[1, 1, 3, 32]} />
+            <cylinderGeometry args={[1, 1, 3, 6]} /> {/* Hexagonal Pillar */}
             <meshStandardMaterial 
-                color="#2a2a4e" 
-                metalness={0.5} 
-                roughness={0.2} 
-                emissive={hovered ? '#1a1a3e' : '#050510'}
+                color="#2a1a1a" 
+                metalness={0.1} 
+                roughness={0.9} 
+                emissive={hovered ? '#3e2723' : '#000000'}
                 emissiveIntensity={0.5}
             />
           </mesh>
 
-          {/* Glass Shell - Standard Transparent Material (Safe) */}
+          {/* Gold Inlays/Shell */}
           <mesh position={[0, 0, 0]}>
-            <cylinderGeometry args={[1.1, 1.1, 3.2, 32]} />
+            <cylinderGeometry args={[1.05, 1.05, 3.1, 6]} />
             <meshStandardMaterial 
-                color="#88ccff"
+                color="#ffcc00"
+                metalness={1}
+                roughness={0.2}
+                wireframe
                 transparent
-                opacity={0.2}
-                roughness={0}
-                metalness={0.5}
+                opacity={0.3}
             />
           </mesh>
 
-          {/* Glowing Core */}
+          {/* Glowing Core - Divine Light */}
           <mesh ref={coreRef} position={[0, 0, 0]}>
-            <sphereGeometry args={[0.5, 32, 32]} />
+            <octahedronGeometry args={[0.6, 0]} />
             <meshBasicMaterial color={coreColor} />
           </mesh>
-          <pointLight position={[0, 0, 0]} distance={3} intensity={2} color={coreColor} />
+          <pointLight position={[0, 0, 0]} distance={5} intensity={3} color={coreColor} />
 
-          {/* Animated Rings */}
+          {/* Animated Halos */}
           <mesh ref={ring1Ref} rotation={[Math.PI / 4, 0, 0]}>
-            <torusGeometry args={[1.4, 0.05, 16, 100]} />
-            <meshBasicMaterial color={glowColor} toneMapped={false} />
+            <torusGeometry args={[1.4, 0.02, 16, 100]} />
+            <meshStandardMaterial color={glowColor} emissive={glowColor} emissiveIntensity={2} toneMapped={false} />
           </mesh>
           <mesh ref={ring2Ref} rotation={[-Math.PI / 4, 0, 0]}>
-            <torusGeometry args={[1.6, 0.05, 16, 100]} />
-            <meshBasicMaterial color={glowColor} toneMapped={false} />
+            <torusGeometry args={[1.6, 0.02, 16, 100]} />
+            <meshStandardMaterial color={glowColor} emissive={glowColor} emissiveIntensity={2} toneMapped={false} />
           </mesh>
 
-          {/* Particles */}
+          {/* Golden Particles */}
           <Sparkles 
             count={50} 
-            scale={4} 
-            size={4} 
-            speed={0.4} 
-            opacity={0.5} 
-            color={glowColor}
+            scale={5} 
+            size={6} 
+            speed={0.2} 
+            opacity={0.8} 
+            color="#ffd700"
           />
 
           {/* Label if not near */}
           {!isNearMachine && (
             <Text
               position={[0, 2.5, 0]}
-              fontSize={0.2}
-              color="white"
+              fontSize={0.15}
+              color="#ffddaa"
+              font="https://fonts.gstatic.com/s/cinzel/v11/8vIJ7ww63mVu7gt78Uk.woff"
               anchorX="center"
               anchorY="middle"
+              letterSpacing={0.2}
             >
-              {hovered ? "CLICK TO COMMUNE" : ""}
+              {hovered ? "COMMUNE WITH THE DIVINE" : ""}
             </Text>
           )}
         </group>
