@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap, BookOpen } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -119,6 +120,11 @@ export function Interface() {
         </div>
 
         <div className="flex gap-2">
+          <Link href="/about">
+            <Button variant="outline" size="icon" className="bg-black/40 border-white/30 text-white hover:bg-white/20 hover:text-white">
+              <BookOpen className="h-4 w-4" />
+            </Button>
+          </Link>
           <Button variant="outline" size="icon" onClick={toggleAudio} className="bg-black/40 border-white/30 text-white hover:bg-white/20 hover:text-white">
             {audioEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
           </Button>
