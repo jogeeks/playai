@@ -67,6 +67,7 @@ interface State {
   // Temple Actions
   transmuteBurden: (burden: string) => Promise<void>;
   resetTemple: () => void;
+  clearTransmutation: () => void;
 
   // Global Actions
   toggleAudio: () => void;
@@ -204,6 +205,7 @@ export const useStore = create(
     },
 
     resetTemple: () => set({ transmutation: null, activeMachine: null }),
+    clearTransmutation: () => set({ transmutation: null }),
 
     toggleAdvancedMode: () => set((state) => ({ isAdvancedMode: !state.isAdvancedMode })),
     updateAdvancedSettings: (settings) => set((state) => ({ 

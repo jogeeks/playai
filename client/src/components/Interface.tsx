@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useStore } from '../store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap, BookOpen, X } from 'lucide-react';
+import { Volume2, VolumeX, Info, Download, RefreshCw, Sparkles, Settings, Send, ArrowLeft, Flame, Zap, BookOpen, X, HelpCircle } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { Tutorial } from './Tutorial';
 
 export function Interface() {
   const { 
@@ -36,12 +37,14 @@ export function Interface() {
     isTransmuting,
     transmuteBurden,
     transmutation,
-    resetTemple
+    resetTemple,
+    clearTransmutation
   } = useStore();
 
   const [aspiration, setAspiration] = useState('');
   const [chatInput, setChatInput] = useState('');
   const [burdenInput, setBurdenInput] = useState('');
+  const [showTutorial, setShowTutorial] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -120,6 +123,23 @@ export function Interface() {
         </div>
 
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowTutorial(true)}
+            className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-white hidden sm:flex"
+            data-testid="button-tutorial-playa"
+          >
+            <HelpCircle className="h-4 w-4 mr-2" /> First Time?
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={() => setShowTutorial(true)}
+            className="bg-black/40 border-[#ffaa55]/30 text-[#ffaa55] hover:bg-[#ffaa55]/20 hover:text-white sm:hidden"
+            data-testid="button-tutorial-playa-mobile"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </Button>
           <Link href="/about">
             <Button variant="outline" size="icon" className="bg-black/40 border-white/30 text-white hover:bg-white/20 hover:text-white">
               <BookOpen className="h-4 w-4" />
@@ -389,7 +409,7 @@ export function Interface() {
 
                              <div className="flex flex-col items-center gap-3 mt-8">
                                  <Button 
-                                    onClick={() => { setTransmutation(null); setBurdenInput(''); }}
+                                    onClick={() => { clearTransmutation(); setBurdenInput(''); }}
                                     variant="outline"
                                     className="border-[#ff4400]/30 text-[#ff4400] hover:bg-[#ff4400]/10"
                                  >
@@ -440,6 +460,9 @@ export function Interface() {
             </p>
         </div>
       )}
+
+      {/* Tutorial Modal */}
+      <Tutorial isOpen={showTutorial} onClose={() => setShowTutorial(false)} />
     </div>
   );
 }

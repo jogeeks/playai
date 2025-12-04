@@ -98,7 +98,7 @@ export function About() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen overflow-y-auto overflow-x-hidden bg-gradient-to-b from-[#1a0f0a] via-[#2a1a10] to-[#1a0f0a] text-[#ffddaa] font-cinzel">
+      <div className="fixed inset-0 bg-gradient-to-b from-[#1a0f0a] via-[#2a1a10] to-[#1a0f0a] text-[#ffddaa] font-cinzel overflow-y-auto overflow-x-hidden">
         
         {/* Quick Navigation - Fixed */}
         <nav className="fixed right-4 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-3" aria-label="Quick navigation">
